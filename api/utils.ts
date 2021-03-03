@@ -6,7 +6,7 @@ interface Comment {
   author_association: 'OWNER' | 'MEMBER' | 'CONTRIBUTOR' | 'NONE'
 }
 
-const { API_BASE, GITHUB_TOKEN, GITHUB_OWNER = '', GITHUB_REPO = '', GITHUB_ISSUE_ID = 1 } = process.env
+const { API_BASE = '', GITHUB_TOKEN = '', GITHUB_OWNER = '', GITHUB_REPO = '', GITHUB_ISSUE_ID = 1 } = process.env
 
 const endpoint = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/issues/${GITHUB_ISSUE_ID}/comments`
 const authorization = `token ${GITHUB_TOKEN}`
@@ -64,4 +64,6 @@ export const createShort = async (url: string, id: string = shortid.generate()):
   return id
 }
 
-export const formatLink = (id: string) => `${API_BASE}/${id}`
+export const formatLink = (id: string): string => `${API_BASE}/${id}`
+
+export const clearCache = (): void => storage.clear()
