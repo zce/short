@@ -1,1 +1,6 @@
-{}
+{
+  "routes": [
+    { "src": "/new", "dest": "/api/create.ts" },
+    { "src": "/(?<id>[^/]*)", "dest": "/api/short.ts" }
+  ]
+}
