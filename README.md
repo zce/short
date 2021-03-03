@@ -4,31 +4,27 @@
 
 ## Endpoints
 
-### GET `/api`
+### GET `/new`
 
-Combine an email address.
+Create a new short url.
 
 ```shell
-$ curl https://short.vercel.app/api
+$ curl https://t.zce.me/new
 ```
 
 #### Parameters
 
-- `name`: email user name, alias: `username`
-- `host`: email host, default: `'zce.me'`
+- `url`: target url, alias: `link`
+- `id`: short id, default: `auto`
 
 #### Response Type
 
 ```json
 {
-  "name": "...",
-  "email": "..."
+  "id": "<shortid>",
+  "link": "http://t.zce.me/<shortid>"
 }
 ```
-
-## Related
-
-<!-- TODO: related projects -->
 
 ## License
 
