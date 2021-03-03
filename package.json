@@ -20,8 +20,8 @@
     ]
   },
   "dependencies": {
-    "got": "^11.8.2",
-    "shortid": "^2.2.16"
+    "got": "11.8.2",
+    "shortid": "2.2.16"
   },
   "devDependencies": {
     "@types/shortid": "0.0.29",
