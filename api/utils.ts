@@ -53,10 +53,13 @@ export const getShortByUrl = async (url: string): Promise<string | undefined> =>
 }
 
 export const createShort = async (url: string, id: string = shortid.generate()): Promise<string> => {
-  await got.post(endpoint, {
+  await got.post<Comment[]>(endpoint, {
     ...requestOptions,
     json: { body: id + splitter + url }
   })
+
+  storage.set(id, url)
+  storage.set(url, id)
 
   return id
 }
