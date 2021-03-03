@@ -10,6 +10,7 @@ const { API_BASE, GITHUB_TOKEN, GITHUB_OWNER = '', GITHUB_REPO = '', GITHUB_ISSU
 
 const endpoint = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/issues/${GITHUB_ISSUE_ID}/comments`
 const authorization = `token ${GITHUB_TOKEN}`
+const splitter = '|'
 
 const requestOptions = {
   headers: { authorization, accept: 'application/vnd.github.v3+json' },
@@ -31,20 +32,33 @@ export const fetchLinks = async (): Promise<Map<string, string>> => {
   for await (const item of iterator) {
     if (!whiteList.includes(item.author_association)) continue
 
-    const [id, url] = item.body.trim().split(':')
+    const [id, url] = item.body.trim().split(splitter)
     if (url == null) continue
 
     storage.set(id, url)
+    storage.set(url, id)
   }
 
   return storage
 }
 
-export const createLink = async (url: string, id: string = shortid.generate()): Promise<string> => {
+export const getUrlByShort = async (id: string): Promise<string | undefined> => {
+  const links = await fetchLinks()
+  return links.get(id)
+}
+
+export const getShortByUrl = async (url: string): Promise<string | undefined> => {
+  const links = await fetchLinks()
+  return links.get(url)
+}
+
+export const createShort = async (url: string, id: string = shortid.generate()): Promise<string> => {
   await got.post(endpoint, {
     ...requestOptions,
-    json: { body: `${id}:${url}` }
+    json: { body: id + splitter + url }
   })
 
-  return `${API_BASE}/${id}`
+  return id
 }
+
+export const formatLink = (id: string) => `${API_BASE}/${id}`
