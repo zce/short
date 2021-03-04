@@ -213,7 +213,7 @@
         <h1 class="logo">short</h1>
       </div>
     </header>
-    <div class="container" x-data="{ url: '', slug: '', error: '', success: '', loading: false }" x-cloak>
+    <form class="container" x-data="{ url: '', slug: '', error: '', success: '', loading: false }" x-cloak>
       <p id="error" class="error" x-show.transition.opacity="error" x-text="error"></p>
       <p id="success" class="success" x-show.transition.opacity="success" x-text="success"></p>
       <input id="url" class="url" placeholder="Enter a URL to shorten..." x-model="url" />
@@ -227,14 +227,13 @@
       </details>
       <button
         id="generate"
-        type="button"
         class="button"
         :disabled="loading"
-        @click="loading = true; error = ''; fetch('/create', { method: 'post', body: JSON.stringify({ url, slug }), headers: { 'content-type': 'application/json' } }).then(res => res.json()).then(res => { if (res.error) { error = res.message } else { url = `${location.origin}/${res.slug}`; clipboard.writeText(url); success = 'Short URL copy succeeded!' } loading = false })"
+        @click.prevent="loading = true; error = ''; fetch('/create', { method: 'post', body: JSON.stringify({ url, slug }), headers: { 'content-type': 'application/json' } }).then(res => res.json()).then(res => { if (res.error) { error = res.message } else { url = `${location.origin}/${res.slug}`; clipboard.writeText(url); success = 'Short URL copy succeeded!' } loading = false })"
       >
         <i class="loading" x-show.transition.opacity="loading"></i>Generate
       </button>
-    </div>
+    </form>
     <footer>
       <p class="container">
         This service is Hosted on <a href="https://vercel.com">Vercel</a>.&nbsp;&nbsp; <br />
