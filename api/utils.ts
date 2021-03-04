@@ -50,6 +50,7 @@ export const fetchLinks = async (): Promise<Map<string, string>> => {
 export const createLink = async (url: string, slug?: string): Promise<string> => {
   if (slug == null || slug === '') slug = nanoid(6)
 
+  // slug reserved
   if (reservedList.includes(slug) || slug.length === 1) {
     throw new Error(`Slug '${slug}' is reserved.`)
   }

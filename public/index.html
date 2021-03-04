@@ -230,7 +230,7 @@
         type="button"
         class="button"
         :disabled="loading"
-        @click="loading = true; error = ''; fetch('/create', { method: 'post', body: JSON.stringify({ url, slug }), headers: { 'content-type': 'application/json' } }).then(res => res.json()).then(res => { if (res.error) { error = res.message } else { url = res.link; clipboard.writeText(url); success = 'Short URL copy succeeded!' } loading = false })"
+        @click="loading = true; error = ''; fetch('/create', { method: 'post', body: JSON.stringify({ url, slug }), headers: { 'content-type': 'application/json' } }).then(res => res.json()).then(res => { if (res.error) { error = res.message } else { url = `${location.origin}/${res.slug}`; clipboard.writeText(url); success = 'Short URL copy succeeded!' } loading = false })"
       >
         <i class="loading" x-show.transition.opacity="loading"></i>Generate
       </button>
