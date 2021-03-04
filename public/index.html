@@ -1,50 +1,248 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>short</title>
-  <link rel="stylesheet" href="https://unpkg.com/modern-normalize">
-  <link rel="stylesheet" href="https://unpkg.com/minima.css">
-</head>
-<body>
-  <header class="site-header">
-    <div class="container">
-      <h1>short</h1>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>short</title>
+    <style>
+      html {
+        font-size: 16px;
+      }
+
+      body {
+        margin: 0px;
+        color: rgb(51, 64, 77);
+        background: rgb(248, 249, 250);
+        font-size: 1rem;
+        font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        font-weight: 400;
+        line-height: 1.5;
+        text-size-adjust: 100%;
+        -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+        text-rendering: optimizelegibility;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      a {
+        color: #597ef7;
+        text-decoration: none;
+        transition: color 0.3s;
+      }
+
+      a:hover {
+        color: #597ef7;
+        text-decoration: underline;
+      }
+
+      label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: 600;
+      }
+
+      input {
+        -webkit-appearance: none;
+        appearance: none;
+        display: block;
+        width: 100%;
+        padding: 0.5rem 1rem;
+        border: 1px solid #d1d9e0;
+        border-radius: 0.25rem;
+        box-sizing: border-box;
+        color: #33404d;
+        line-height: inherit;
+        font-size: 1rem;
+        resize: vertical;
+        transition: border 0.3s, background 0.3s, color 0.3s, box-shadow 0.3s;
+      }
+
+      input:focus {
+        box-shadow: 0 0 0 0.25rem rgba(89, 126, 247, 0.3);
+        border-color: #597ef7;
+        outline: 0;
+      }
+
+      button {
+        appearance: none;
+        display: block;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        border: 1px solid #597ef7;
+        border-radius: 0.25rem;
+        background: #597ef7;
+        color: #fff;
+        font-size: 1rem;
+        font-weight: 500;
+        line-height: inherit;
+        cursor: pointer;
+        user-select: none;
+        transition: border 0.3s, background 0.3s, color 0.3s;
+      }
+
+      button:hover {
+        border-color: #416bf6;
+        background: #416bf6;
+        color: #fff;
+      }
+
+      button:focus {
+        border-color: rgb(89, 126, 247);
+        box-shadow: rgba(89, 126, 247, 0.3) 0px 0px 0px 0.125rem;
+        outline: 0px;
+      }
+
+      [x-cloak] {
+        opacity: 0;
+      }
+
+      :not([x-cloak]) {
+        opacity: 1;
+        transition: opacity 0.3s;
+      }
+
+      .container {
+        max-width: 30rem;
+        margin-left: auto;
+        margin-right: auto;
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+
+      .logo {
+        font-size: 5rem;
+        font-weight: 300;
+        text-align: center;
+        opacity: 0.3;
+      }
+
+      .advanced {
+        margin: 1rem 0 2rem;
+        border: 1px solid #d1d9e0;
+        border-radius: 0.25rem;
+        transition: background 0.3s ease 0s, box-shadow 0.3s ease 0s;
+      }
+
+      .advanced summary {
+        padding: 0.5rem 1rem;
+        font-weight: 500;
+        user-select: none;
+        cursor: pointer;
+        outline: 0;
+      }
+
+      .advanced .inner {
+        padding: 1rem;
+        border-top: 1px solid #d1d9e0;
+      }
+
+      .advanced[open] {
+        background: #fff;
+      }
+
+      .success,
+      .error {
+        margin-bottom: 1rem;
+        padding: 0.5rem 1rem;
+        border-radius: 0.25rem;
+        color: #fff;
+        text-align: center;
+        opacity: 1;
+        transition: opacity 0.3s;
+      }
+
+      .success {
+        border: 1px solid #40c057;
+        background: #8ce99a;
+      }
+
+      .error {
+        border: 1px solid #ff8787;
+        background: #ffa8a8;
+      }
+
+      .enter {
+        opacity: 0;
+      }
+
+      .muted {
+        margin: 0;
+        font-size: 0.875rem;
+        line-height: 2;
+        color: #667f99;
+      }
+
+      .button {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 4rem;
+      }
+
+      .button:disabled {
+        opacity: 0.6;
+        cursor: wait;
+      }
+
+      .loading {
+        display: inline-block;
+        margin-right: 0.5rem;
+        border: 2px solid #fff;
+        border-top-color: transparent;
+        border-radius: 50%;
+        width: 0.75rem;
+        height: 0.75rem;
+        animation: rotate 0.5s linear infinite;
+      }
+
+      footer {
+        border-top: 1px solid #eee;
+        text-align: center;
+        color: #667f99;
+      }
+
+      @keyframes rotate {
+        100% {
+          transform: rotate(360deg);
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <div class="container">
+        <h1 class="logo">short</h1>
+      </div>
+    </header>
+    <div class="container" x-data="{ url: '', slug: '', error: '', success: '', loading: false }" x-cloak>
+      <p id="error" class="error" x-show.transition.opacity="error" x-text="error"></p>
+      <p id="success" class="success" x-show.transition.opacity="success" x-text="success"></p>
+      <input id="url" class="url" placeholder="Enter a URL to shorten..." x-model="url" />
+      <details class="advanced">
+        <summary>Advanced settings</summary>
+        <div class="inner">
+          <label for="slug">slug</label>
+          <input id="slug" class="slug" placeholder="Custom slug" x-model="slug" />
+          <p class="muted"><code>Slug</code> is a randomly generated short ID by default.</p>
+        </div>
+      </details>
+      <button
+        id="generate"
+        type="button"
+        class="button"
+        :disabled="loading"
+        @click="loading = true; error = ''; fetch('/create', { method: 'post', body: JSON.stringify({ url, slug }), headers: { 'content-type': 'application/json' } }).then(res => res.json()).then(res => { if (res.error) { error = res.message } else { url = res.link; clipboard.writeText(url); success = 'Short URL copy succeeded!' } loading = false })"
+      >
+        <i class="loading" x-show.transition.opacity="loading"></i>Generate
+      </button>
     </div>
-  </header>
-
-  <main class="site-main">
-    <section class="container">
-      <h2>Introduction</h2>
-      <p>A short url service.</p>
-      <p><a href="https://github.com/zce/short#readme" class="button">Getting started</a></p>
-    </section>
-
-    <section class="container">
-      <h2>Endpoints</h2>
-      <h3>GET <code>/new</code></h3>
-      <p>Create a new short url.</p>
-      <pre><code>$ curl https://t.zce.me/new</code></pre>
-      <h4>Parameters</h4>
-      <ul>
-        <li><code>url</code>: target url, alias: <code>link</code></li>
-        <li><code>id</code>: short id, default: <code>auto</code></li>
-      </ul>
-      <h4>Response</h4>
-      <pre><code>{
-  "id": "&lt;shortid&gt;",
-  "link": "http://t.zce.me/&lt;shortid&gt;"
-}</code></pre>
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <p class="container">
-      This service is Hosted on <a href="https://vercel.com">Vercel</a>.&nbsp;&nbsp;
-      <a href="https://github.com/zce/short">&lt;/&gt;</a> with <span class="heart">&hearts;</span> by <a href="https://zce.me">zce</a>.
-      Licensed under the <a href="https://github.com/zce/short/blob/master/LICENSE">MIT License</a>.
-    </p>
-  </footer>
-</body>
+    <footer>
+      <p class="container">
+        This service is Hosted on <a href="https://vercel.com">Vercel</a>.&nbsp;&nbsp; <br />
+        <a href="https://github.com/zce/short">&lt;/&gt;</a> with <span class="heart">&hearts;</span> by
+        <a href="https://zce.me">zce</a>.
+      </p>
+    </footer>
+    <script src="https://unpkg.com/clipboard-polyfill"></script>
+    <script src="https://unpkg.com/alpinejs"></script>
+  </body>
 </html>

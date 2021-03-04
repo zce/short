@@ -1,7 +1,7 @@
 {
   "rewrites": [
-    { "source": "/refresh", "destination": "/api/refresh" },
-    { "source": "/new", "destination": "/api/create" },
-    { "source": "/:id", "destination": "/api/short" }
+    { "source": "/(reboot/refresh)", "destination": "/api/refresh" },
+    { "source": "/(new|create)", "destination": "/api/create" },
+    { "source": "/:slug", "destination": "/api/short" }
   ]
 }

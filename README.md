@@ -14,7 +14,7 @@ $ curl https://t.zce.me/new
 
 #### Parameters
 
-- `url`: target url, alias: `link`
+- `url`: target url
 - `id`: short id, default: `auto`
 
 #### Response Type

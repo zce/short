@@ -1,5 +1,5 @@
-import shortid from 'shortid'
 import got from 'got'
+import { nanoid } from 'nanoid'
 
 interface Comment {
   body: string
@@ -8,62 +8,62 @@ interface Comment {
 
 const { API_BASE = '', GITHUB_TOKEN = '', GITHUB_OWNER = '', GITHUB_REPO = '', GITHUB_ISSUE_ID = 1 } = process.env
 
+const splitter = '||'
+const accept = 'application/vnd.github.v3+json'
 const endpoint = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/issues/${GITHUB_ISSUE_ID}/comments`
 const authorization = `token ${GITHUB_TOKEN}`
-const splitter = '|'
+const whiteList = ['OWNER', 'MEMBER']
+const reservedList = ['new', 'create', 'admin', 'feed', 'home', 'about', 'contact', 'blog']
 
 const requestOptions = {
-  headers: { authorization, accept: 'application/vnd.github.v3+json' },
-  timeout: 5 * 1000
+  headers: { authorization, accept },
+  timeout: 5 * 1000 // 5s
 }
 
-const whiteList = ['OWNER', 'MEMBER']
-
-const storage = new Map()
+const cache = new Map()
 
 export const fetchLinks = async (): Promise<Map<string, string>> => {
-  if (storage.size > 0) return storage
+  // from cache priority
+  if (cache.size > 0) return cache
 
-  const iterator = got.paginate<Comment>(endpoint, {
-    ...requestOptions,
-    searchParams: { per_page: 100 }
-  })
+  // fetch all comments from github repo issue
+  const comments = got.paginate<Comment>(endpoint, { ...requestOptions, searchParams: { per_page: 100 } })
 
-  for await (const item of iterator) {
+  for await (const item of comments) {
+    // ignore items not author added
     if (!whiteList.includes(item.author_association)) continue
 
-    const [id, url] = item.body.trim().split(splitter)
+    // parse each item to get the mapping
+    const [slug, url] = item.body.trim().split(splitter)
+
+    // item format checking
     if (url == null) continue
 
-    storage.set(id, url)
-    storage.set(url, id)
+    // two-way map
+    cache.set(slug, url)
+    cache.set(url, slug)
   }
 
-  return storage
+  return cache
 }
 
-export const getUrlByShort = async (id: string): Promise<string | undefined> => {
-  const links = await fetchLinks()
-  return links.get(id)
+export const createLink = async (url: string, slug?: string): Promise<string> => {
+  if (slug == null || slug === '') slug = nanoid(6)
+
+  if (reservedList.includes(slug) || slug.length === 1) {
+    throw new Error(`Slug '${slug}' is reserved.`)
+  }
+
+  // create github repo issue comment
+  await got.post<Comment>(endpoint, { ...requestOptions, json: { body: slug + splitter + url } })
+
+  // two-way map
+  cache.set(slug, url)
+  cache.set(url, slug)
+
+  return slug
 }
 
-export const getShortByUrl = async (url: string): Promise<string | undefined> => {
-  const links = await fetchLinks()
-  return links.get(url)
-}
+export const formatLink = (slug: string): string => `${API_BASE}/${slug}`
 
-export const createShort = async (url: string, id: string = shortid.generate()): Promise<string> => {
-  await got.post<Comment[]>(endpoint, {
-    ...requestOptions,
-    json: { body: id + splitter + url }
-  })
-
-  storage.set(id, url)
-  storage.set(url, id)
-
-  return id
-}
-
-export const formatLink = (id: string): string => `${API_BASE}/${id}`
-
-export const clearCache = (): void => storage.clear()
+export const clearCache = (): void => cache.clear()
