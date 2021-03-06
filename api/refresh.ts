@@ -7,12 +7,15 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<any> => 
     clearCache()
 
     const links = await fetchLinks()
-    const rules = ['location / { return 307 https://zce.me; }']
-    for (const [key, value] of links.entries()) {
-      if (/^https?:\/\/.+/.test(key)) continue
-      rules.push(`location /${key} { return 307 ${value}; }`)
+
+    if (process.env.NODE_ENV === 'development') {
+      const rules = ['location / { return 307 https://zce.me; }']
+      for (const [key, value] of links.entries()) {
+        if (/^https?:\/\/.+/.test(key)) continue
+        rules.push(`location /${key} { return 307 ${value}; }`)
+      }
+      await fs.writeFile(__dirname + '/../nginx/rules.conf', rules.join('\n'))
     }
-    await fs.writeFile(__dirname + '/../nginx/rules.conf', rules.join('\n'))
 
     res.redirect('/')
   } catch (e) {
