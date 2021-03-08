@@ -31,12 +31,12 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<any> => 
     const exists = links.get(url)
 
     // url & slug exists
-    if (exists != null && (slug == null || slug === '' || slug === exists)) {
+    if (exists != null && (slug == null || slug === '')) {
       return res.send({ slug: exists, link: formatLink(exists) })
     }
 
     if (!/^https?:\/\/.+/.test(url)) {
-      return res.status(400).send({ error: 'Bad Request', message: 'Illegal URL format' })
+      return res.status(400).send({ error: 'Bad Request', message: 'Illegal URL format.' })
     }
 
     // create if not exists
