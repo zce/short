@@ -1,19 +1,18 @@
 import got from 'got'
-import { nanoid } from 'nanoid'
+import { customAlphabet } from 'nanoid'
 
 interface Comment {
   body: string
   author_association: 'OWNER' | 'MEMBER' | 'CONTRIBUTOR' | 'NONE'
 }
 
-const { API_BASE = '', GITHUB_TOKEN = '', GITHUB_OWNER = '', GITHUB_REPO = '', GITHUB_ISSUE_ID = 1 } = process.env
+const { GITHUB_TOKEN = '', GITHUB_OWNER = '', GITHUB_REPO = '', GITHUB_ISSUE_ID = 1 } = process.env
 
 const splitter = '||'
 const accept = 'application/vnd.github.v3+json'
 const endpoint = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/issues/${GITHUB_ISSUE_ID}/comments`
 const authorization = `token ${GITHUB_TOKEN}`
 const whiteList = ['OWNER', 'MEMBER']
-const reservedList = ['new', 'create', 'admin', 'feed', 'home', 'about', 'contact', 'blog']
 
 const requestOptions = {
   headers: { authorization, accept },
@@ -21,6 +20,10 @@ const requestOptions = {
 }
 
 const cache = new Map()
+
+export const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 6)
+
+export const clearCache = (): void => cache.clear()
 
 export const fetchLinks = async (): Promise<Map<string, string>> => {
   // from cache priority
@@ -47,14 +50,7 @@ export const fetchLinks = async (): Promise<Map<string, string>> => {
   return cache
 }
 
-export const createLink = async (url: string, slug?: string): Promise<string> => {
-  if (slug == null || slug === '') slug = nanoid(6)
-
-  // slug reserved
-  if (reservedList.includes(slug) || slug.length === 1) {
-    throw new Error(`Slug '${slug}' is reserved.`)
-  }
-
+export const createLink = async (url: string, slug: string): Promise<string> => {
   // create github repo issue comment
   await got.post<Comment>(endpoint, { ...requestOptions, json: { body: slug + splitter + url } })
 
@@ -64,7 +60,3 @@ export const createLink = async (url: string, slug?: string): Promise<string> =>
 
   return slug
 }
-
-export const formatLink = (slug: string): string => `${API_BASE}/${slug}`
-
-export const clearCache = (): void => cache.clear()
