@@ -1,0 +1,30 @@
+{
+  "name": "short",
+  "version": "0.1.0",
+  "description": "A short url service.",
+  "keywords": [
+    "short",
+    "api",
+    "zce"
+  ],
+  "repository": "zce/short",
+  "license": "MIT",
+  "author": "zce <w@zce.me> (https://zce.me)",
+  "scripts": {
+    "lint": "ts-standard --fix",
+    "develop": "npx vercel dev"
+  },
+  "renovate": {
+    "extends": [
+      "zce"
+    ]
+  },
+  "dependencies": {
+    "got": "11.8.2",
+    "nanoid": "3.1.20"
+  },
+  "devDependencies": {
+    "@vercel/node": "1.9.0",
+    "ts-standard": "10.0.0"
+  }
+}
