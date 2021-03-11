@@ -20,8 +20,8 @@
         max-width: 30rem;
         margin-left: auto;
         margin-right: auto;
-        padding-left: 1rem;
-        padding-right: 1rem;
+        padding-left: 2rem;
+        padding-right: 2rem;
         color: var(--body-color);
         background: var(--body-bg);
         font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -30,11 +30,12 @@
         text-rendering: optimizelegibility;
         -webkit-font-smoothing: antialiased;
       }
+
       h1 {
         font-size: 5rem;
         font-weight: 300;
         text-align: center;
-        opacity: .3;
+        opacity: .2;
       }
 
       form[x-cloak] {
@@ -160,7 +161,7 @@
         padding: 1rem;
         border-top: 1px solid var(--border-color);
         text-align: center;
-        opacity: .4;
+        opacity: .5;
       }
 
       .success,
@@ -192,7 +193,7 @@
     </style>
   </head>
   <body>
-    <header><h1>short</h1></header>
+    <header><h1>toas.cc</h1></header>
     <form x-data="app" x-cloak>
       <p x-show.transition.opacity="alert" :class="alert?.type" x-text="alert?.message"></p>
       <input placeholder="Enter a URL to shorten..." x-model="url" x-ref="url" />
