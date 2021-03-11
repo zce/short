@@ -21,7 +21,7 @@
   },
   "dependencies": {
     "got": "11.8.2",
-    "nanoid": "3.1.20"
+    "nanoid": "3.1.21"
   },
   "devDependencies": {
     "@vercel/node": "1.9.1",
