@@ -21,7 +21,7 @@ const requestOptions = {
 
 const cache = new Map()
 
-export const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 6)
+export const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 4)
 
 export const clearCache = (): void => cache.clear()
 
