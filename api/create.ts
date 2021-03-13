@@ -1,6 +1,6 @@
 import { IncomingHttpHeaders } from 'http'
 import { VercelRequest, VercelResponse } from '@vercel/node'
-import storage from './storage'
+import storage from '../storage'
 
 const getForwarded = (headers: IncomingHttpHeaders, name: string): string => headers[`x-forwarded-${name}`]?.toString() ?? ''
 

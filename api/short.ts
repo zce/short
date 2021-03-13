@@ -1,5 +1,5 @@
 import { VercelRequest, VercelResponse } from '@vercel/node'
-import storage from './storage'
+import storage from '../storage'
 
 export default async (req: VercelRequest, res: VercelResponse): Promise<any> => {
   const { slug } = req.query
