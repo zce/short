@@ -163,6 +163,11 @@
         opacity: .5;
       }
 
+      footer i {
+        font-style: normal;
+        color: #ff8787;
+      }
+
       .success,
       .error {
         margin-bottom: 1rem;
@@ -192,7 +197,7 @@
     </style>
   </head>
   <body>
-    <header><h1>toas.cc</h1></header>
+    <header><h1>short</h1></header>
     <form x-data="app" x-cloak>
       <p x-show.transition.opacity="alert" :class="alert?.type" x-text="alert?.message"></p>
       <input placeholder="Enter a URL to shorten..." x-model="url" x-ref="url" />
@@ -208,8 +213,8 @@
       </button>
     </form>
     <footer>
-      This <a href="https://toas.cc">service</a> is Hosted on <a href="https://vercel.com">Vercel</a><br />
-      <a href="https://github.com/zce/short">&lt;/&gt;</a> with <span class="heart">&hearts;</span> by <a href="https://zce.me">zce</a>
+      This <a href="https://t.zce.me">service</a> is hosted on <a href="https://vercel.com">Vercel</a><br />
+      <a href="https://github.com/zce/short">&lt;/&gt;</a> with <i>&hearts;</i> by <a href="https://zce.me">zce</a>
     </footer>
     <script src="https://unpkg.com/alpinejs"></script>
     <script>

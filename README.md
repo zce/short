@@ -4,12 +4,11 @@
 
 ## Online Services
 
-- https://toas.cc
 - https://t.zce.me
 
 ## Getting Started
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https%3A%2F%2Fgithub.com%2Fzce%2Fshort&env=GITHUB_OWNER,GITHUB_REPO,GITHUB_ISSUE_ID,GITHUB_TOKEN&demo-url=https%3A%2F%2Ftoas.cc)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https%3A%2F%2Fgithub.com%2Fzce%2Fshort&env=GITHUB_OWNER,GITHUB_REPO,GITHUB_ISSUE_ID,GITHUB_TOKEN&demo-url=https%3A%2F%2Ft.zce.me)
 
 ### Environment Variables
 
@@ -27,7 +26,7 @@
 Create a new short url.
 
 ```shell
-$ curl https://toas.cc/create
+$ curl https://t.zce.me/create
 ```
 
 #### Parameters
@@ -40,7 +39,7 @@ $ curl https://toas.cc/create
 ```json
 {
   "slug": "<slug>",
-  "link": "http://toas.cc/<slug>"
+  "link": "http://t.zce.me/<slug>"
 }
 ```
 
