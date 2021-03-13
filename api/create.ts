@@ -1,6 +1,6 @@
 import { IncomingHttpHeaders } from 'http'
 import { VercelRequest, VercelResponse } from '@vercel/node'
-import { nanoid, createLink, fetchLinks } from './utils'
+import storage from './storage'
 
 const getForwarded = (headers: IncomingHttpHeaders, name: string): string => headers[`x-forwarded-${name}`]?.toString() ?? ''
 
@@ -22,41 +22,38 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<any> => 
   }
 
   // custom slug length check
-  if (slug.length !== 0 &&( slug.length < 2 || slug.length > 10)) {
+  if (slug.length !== 0 && (slug.length < 2 || slug.length > 10)) {
     return res.status(400).send({ message: 'Illegal length: slug, (>= 2 && <= 10).' })
   }
 
   try {
-    // fetch all existing links
-    const links = await fetchLinks()
-
     // if slug customized
     if (slug !== '') {
-      const exists = links.get(slug)
-
+      const existUrl = await storage.getUrlBySlug(slug)
       // url & slug are the same.
-      if (exists === url) {
+      if (existUrl === url) {
         return res.send({ slug, link: formatLink(req, slug) })
       }
-
       // slug already exists
-      if (exists != null) {
+      if (existUrl != null) {
         return res.status(400).send({ message: 'Slug already exists.' })
       }
     }
 
     // target url exists
-    const exists = links.get(url)
+    const existSlug = await storage.getSlugByUrl(url)
 
     // url exists & no custom slug
-    if (exists != null && slug === '') {
-      return res.send({ slug: exists, link: formatLink(req, exists) })
+    if (existSlug != null && slug === '') {
+      return res.send({ slug: existSlug, link: formatLink(req, existSlug) })
     }
 
     // create if not exists
-    const result = await createLink(url, slug === '' ? nanoid() : slug)
-    res.send({ slug: result, link: formatLink(req, result) })
+    const newSlug = await storage.addLink(url, slug)
+
+    // response
+    res.send({ slug: newSlug, link: formatLink(req, newSlug) })
   } catch (e) {
-    return res.status(400).send({ message: e.message })
+    return res.status(500).send({ message: e.message })
   }
 }

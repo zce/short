@@ -1,23 +1,26 @@
 import { VercelRequest, VercelResponse } from '@vercel/node'
-import { fetchLinks } from './utils'
+import storage from './storage'
 
 export default async (req: VercelRequest, res: VercelResponse): Promise<any> => {
-  if (typeof req.query.slug !== 'string' || req.query.slug === '') {
+  const { slug } = req.query
+
+  if (typeof slug !== 'string' || slug === '') {
     return res.status(400).send('Bad Request')
   }
 
   try {
-    const links = await fetchLinks()
-
     // get target url by slug
-    const url = links.get(req.query.slug)
+    const url = await storage.getUrlBySlug(slug)
 
     // target url not found
     if (url == null) return res.status(404).send('Not Found')
 
     // 307 redirect if target exists
     res.redirect(url)
+
+    // add access log
+    await storage.addLog(slug, req.headers['user-agent'], req.headers['x-real-ip']?.toString())
   } catch (e) {
-    return res.status(400).send(e.message)
+    return res.status(500).send(e.message)
   }
 }
