@@ -22,30 +22,12 @@ const requestOptions = {
 }
 
 export default class GitHub extends BaseStorage {
-  private async fetchCache (): Promise<void> {
-    // from cache priority
-    if (this.cache.size > 0) return
-
+  private fetchComments (): AsyncIterableIterator<Comment> {
     // fetch all comments from github repo issue
-    const comments = got.paginate<Comment>(endpoint, {
+    return got.paginate<Comment>(endpoint, {
       ...requestOptions,
       searchParams: { per_page: 100 }
     })
-
-    for await (const item of comments) {
-      // ignore items not author added
-      if (!whiteList.includes(item.author_association)) continue
-
-      // parse each item to get the mapping
-      const [slug, url] = item.body.trim().split(splitter)
-
-      // item format checking
-      if (url == null) continue
-
-      // two-way map
-      this.cache.set(slug, url)
-      this.cache.set(url, slug)
-    }
   }
 
   async addLink (url: string, slug?: string): Promise<string> {
@@ -57,10 +39,6 @@ export default class GitHub extends BaseStorage {
       json: { body: slug + splitter + url }
     })
 
-    // two-way map
-    this.cache.set(slug, url)
-    this.cache.set(url, slug)
-
     return slug
   }
 
@@ -69,12 +47,24 @@ export default class GitHub extends BaseStorage {
   }
 
   async getUrlBySlug (slug: string): Promise<string | undefined> {
-    await this.fetchCache()
-    return this.cache.get(slug)
+    for await (const item of this.fetchComments()) {
+      // ignore items not author added
+      if (!whiteList.includes(item.author_association)) continue
+      // parse each item to get the mapping
+      const [s, u] = item.body.trim().split(splitter)
+      // item format checking
+      if (u != null && s === slug) return u
+    }
   }
 
   async getSlugByUrl (url: string): Promise<string | undefined> {
-    await this.fetchCache()
-    return this.cache.get(url)
+    for await (const item of this.fetchComments()) {
+      // ignore items not author added
+      if (!whiteList.includes(item.author_association)) continue
+      // parse each item to get the mapping
+      const [s, u] = item.body.trim().split(splitter)
+      // item format checking
+      if (u === url) return s
+    }
   }
 }

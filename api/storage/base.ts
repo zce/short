@@ -3,16 +3,6 @@ import { customAlphabet } from 'nanoid'
 export const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 4)
 
 export default abstract class BaseStorage {
-  protected cache: Map<string, string>
-
-  constructor () {
-    this.cache = new Map()
-  }
-
-  async clearCache (): Promise<void> {
-    this.cache.clear()
-  }
-
   async createSlug (): Promise<string> {
     return nanoid()
   }
