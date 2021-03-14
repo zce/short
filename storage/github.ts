@@ -42,10 +42,6 @@ export default class GitHub extends BaseStorage {
     return slug
   }
 
-  async addLog (slug: string, ua?: string, ip?: string): Promise<void> {
-    console.log({ slug, ua, ip, timestamp: Date.now() })
-  }
-
   async getUrlBySlug (slug: string): Promise<string | undefined> {
     for await (const item of this.fetchComments()) {
       // ignore items not author added

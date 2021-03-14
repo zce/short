@@ -7,9 +7,11 @@ export default abstract class BaseStorage {
     return nanoid()
   }
 
-  abstract addLink (url: string, slug?: string): Promise<string>
+  async addLog (slug: string, ua?: string, ip?: string): Promise<void> {
+    console.log({ slug, ua, ip, timestamp: Date.now() })
+  }
 
-  abstract addLog (slug: string, ua?: string, ip?: string): Promise<void>
+  abstract addLink (url: string, slug?: string): Promise<string>
 
   abstract getUrlBySlug (slug: string): Promise<string | undefined>
 

@@ -19,10 +19,6 @@ export default class Redis extends BaseStorage {
     return slug
   }
 
-  async addLog (slug: string, ua?: string, ip?: string): Promise<void> {
-    console.log({ slug, ua, ip, timestamp: Date.now() })
-  }
-
   async getUrlBySlug (slug: string): Promise<string | undefined> {
     const res = await get(slug)
     if (res != null) return res
