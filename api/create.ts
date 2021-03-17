@@ -1,10 +1,5 @@
-import { IncomingHttpHeaders } from 'http'
 import { VercelRequest, VercelResponse } from '@vercel/node'
 import storage from '../storage'
-
-const getForwarded = (headers: IncomingHttpHeaders, name: string): string => headers[`x-forwarded-${name}`]?.toString() ?? ''
-
-const formatLink = ({ headers }: VercelRequest, slug: string): string => `${getForwarded(headers, 'proto')}://${getForwarded(headers, 'host')}/${slug}`
 
 export default async (req: VercelRequest, res: VercelResponse): Promise<any> => {
   // params from request body or querystring
@@ -26,14 +21,21 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<any> => 
     return res.status(400).send({ message: 'Illegal length: slug, (>= 2 && <= 10).' })
   }
 
+  const getForwarded = (name: string): string => req.headers[`x-forwarded-${name}`]?.toString() ?? ''
+
   try {
+    // request origin url
+    const origin = `${getForwarded('proto')}://${getForwarded('host')}/`
+
     // if slug customized
     if (slug !== '') {
       const existUrl = await storage.getUrlBySlug(slug)
+
       // url & slug are the same.
       if (existUrl === url) {
-        return res.send({ slug, link: formatLink(req, slug) })
+        return res.send({ slug, link: origin + slug })
       }
+
       // slug already exists
       if (existUrl != null) {
         return res.status(400).send({ message: 'Slug already exists.' })
@@ -45,14 +47,14 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<any> => 
 
     // url exists & no custom slug
     if (existSlug != null && slug === '') {
-      return res.send({ slug: existSlug, link: formatLink(req, existSlug) })
+      return res.send({ slug: existSlug, link: origin + existSlug })
     }
 
     // create if not exists
     const newSlug = await storage.addLink(url, slug)
 
     // response
-    res.send({ slug: newSlug, link: formatLink(req, newSlug) })
+    res.send({ slug: newSlug, link: origin + newSlug })
   } catch (e) {
     return res.status(500).send({ message: e.message })
   }
