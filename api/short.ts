@@ -17,10 +17,10 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<any> => 
 
     // 307 redirect if target exists
     res.redirect(url)
-
-    // add access log
-    await storage.addLog(slug, req.headers['user-agent'], req.headers['x-real-ip']?.toString())
   } catch (e) {
     return res.status(500).send(e.message)
   }
+
+  // add access log
+  await storage.addLog(slug, req.headers['user-agent'], req.headers['x-real-ip']?.toString())
 }

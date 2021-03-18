@@ -4,11 +4,14 @@ export const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyzABCDEF
 
 export default abstract class BaseStorage {
   async createSlug (): Promise<string> {
-    return nanoid()
+    const slug = nanoid()
+    const exists = await this.getUrlBySlug(slug)
+    if (exists == null) return slug
+    return await this.createSlug()
   }
 
   async addLog (slug: string, ua?: string, ip?: string): Promise<void> {
-    console.log({ slug, ua, ip, timestamp: Date.now() })
+    console.log({ slug, ua, ip, date: new Date() })
   }
 
   abstract addLink (url: string, slug?: string): Promise<string>
