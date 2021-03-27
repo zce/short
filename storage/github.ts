@@ -47,9 +47,9 @@ export default class GitHub extends BaseStorage {
       // ignore items not author added
       if (!whiteList.includes(item.author_association)) continue
       // parse each item to get the mapping
-      const [s, u] = item.body.trim().split(splitter)
+      const [key, value] = item.body.trim().split(splitter)
       // item format checking
-      if (u != null && s === slug) return u
+      if (value != null && key === slug) return value
     }
   }
 
@@ -58,9 +58,9 @@ export default class GitHub extends BaseStorage {
       // ignore items not author added
       if (!whiteList.includes(item.author_association)) continue
       // parse each item to get the mapping
-      const [s, u] = item.body.trim().split(splitter)
+      const [key, value] = item.body.trim().split(splitter)
       // item format checking
-      if (u === url) return s
+      if (value === url) return key
     }
   }
 }
