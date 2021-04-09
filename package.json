@@ -20,6 +20,7 @@
     ]
   },
   "dependencies": {
+    "@cloudbase/node-sdk": "2.5.0",
     "got": "11.8.2",
     "nanoid": "3.1.22",
     "redis": "3.1.0"
