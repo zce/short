@@ -20,14 +20,14 @@
     ]
   },
   "dependencies": {
-    "@cloudbase/node-sdk": "2.5.0",
+    "@cloudbase/node-sdk": "2.6.1",
     "got": "11.8.2",
-    "nanoid": "3.1.22",
-    "redis": "3.1.0"
+    "nanoid": "3.1.23",
+    "redis": "3.1.2"
   },
   "devDependencies": {
-    "@types/redis": "2.8.28",
-    "@vercel/node": "1.9.1",
+    "@types/redis": "2.8.31",
+    "@vercel/node": "1.11.1",
     "ts-standard": "10.0.0"
   }
 }
