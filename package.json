@@ -27,7 +27,7 @@
   },
   "devDependencies": {
     "@types/redis": "2.8.31",
-    "@vercel/node": "1.11.1",
+    "@vercel/node": "1.12.1",
     "ts-standard": "10.0.0"
   }
 }
