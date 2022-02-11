@@ -14,11 +14,11 @@ const whiteList = ['OWNER', 'MEMBER']
 const splitter = '||'
 
 const requestOptions = {
+  timeout: { request: 5 * 1000 },
   headers: {
     authorization: `token ${GITHUB_TOKEN}`,
     accept: 'application/vnd.github.v3+json'
-  },
-  timeout: 5 * 1000 // 5s
+  }
 }
 
 export default class GitHub extends BaseStorage {

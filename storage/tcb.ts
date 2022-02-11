@@ -15,7 +15,7 @@ export default class Redis extends BaseStorage {
   }
 
   async addLink (url: string, slug?: string): Promise<string> {
-    slug = slug || await this.createSlug()
+    slug = slug == null || slug === '' ? await this.createSlug() : slug
     const collection = db.collection('links')
     await collection.add({ slug, url })
     return slug
