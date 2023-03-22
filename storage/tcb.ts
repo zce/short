@@ -1,6 +1,7 @@
+// install @cloudbase/node-sdk
 import { init } from '@cloudbase/node-sdk'
 
-import BaseStorage from './base'
+import BaseStorage from './base.js'
 
 const { TCB_ENV_ID, TCB_SECRET_ID, TCB_SECRET_KEY } = process.env
 

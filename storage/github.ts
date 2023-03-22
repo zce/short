@@ -1,6 +1,6 @@
 import got from 'got'
 
-import BaseStorage from './base'
+import BaseStorage from './base.js'
 
 interface Comment {
   body: string

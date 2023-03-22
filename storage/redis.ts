@@ -1,6 +1,6 @@
 import { createClient } from 'redis'
 
-import BaseStorage from './base'
+import BaseStorage from './base.js'
 
 const client = createClient({ url: process.env.REDIS_URL })
 
