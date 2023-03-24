@@ -10,6 +10,17 @@
 
 [![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https%3A%2F%2Fgithub.com%2Fzce%2Fshort&env=GITHUB_OWNER,GITHUB_REPO,GITHUB_ISSUE_ID,GITHUB_TOKEN&demo-url=https%3A%2F%2Ft.zce.me)
 
+### Development
+
+```shell
+$ git clone https://github.com/zce/short.git
+$ cd short
+$ cp .env.example .env
+$ vi .env
+$ npm install
+$ npm run develop
+```
+
 ### Environment Variables
 
 - `REDIS_URL`: Redis url.

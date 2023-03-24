@@ -21,6 +21,7 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<any> => 
     // 307 redirect if target exists
     res.redirect(url)
   } catch (e) {
-    return res.status(500).send(e.message)
+    const err = e as Error
+    return res.status(500).send(err.message)
   }
 }

@@ -1,5 +1,3 @@
-import GitHub from './github.js'
-// import Redis from './redis.js'
-// import TCB from './tcb.js'
+import Adapter from './redis.js'
 
-export default new GitHub()
+export default new Adapter()

@@ -1,10 +1,11 @@
-import { createClient } from 'redis'
+// install redis
+import Redis from 'ioredis'
 
 import BaseStorage from './base.js'
 
-const client = createClient({ url: process.env.REDIS_URL })
+const client = new Redis(process.env.REDIS_URL!)
 
-export default class Redis extends BaseStorage {
+export default class RedisClient extends BaseStorage {
   async addLink (url: string, slug?: string): Promise<string> {
     slug = slug == null || slug === '' ? await this.createSlug() : slug
 

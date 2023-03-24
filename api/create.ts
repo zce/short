@@ -56,6 +56,7 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<any> => 
     // response
     res.send({ slug: newSlug, link: origin + newSlug })
   } catch (e) {
-    return res.status(500).send({ message: e.message })
+    const err = e as Error
+    return res.status(500).send({ message: err.message })
   }
 }
