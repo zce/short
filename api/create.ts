@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import storage from '../storage/index.js'
+import store from './store.js'
 
 export default async (req: VercelRequest, res: VercelResponse): Promise<any> => {
   // params from request body or querystring
@@ -29,7 +29,7 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<any> => 
 
     // if slug customized
     if (slug !== '') {
-      const existUrl = await storage.getUrlBySlug(slug)
+      const existUrl = await store.getUrlBySlug(slug)
 
       // url & slug are the same.
       if (existUrl === url) {
@@ -43,7 +43,7 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<any> => 
     }
 
     // target url exists
-    const existSlug = await storage.getSlugByUrl(url)
+    const existSlug = await store.getSlugByUrl(url)
 
     // url exists & no custom slug
     if (existSlug != null && slug === '') {
@@ -51,7 +51,7 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<any> => 
     }
 
     // create if not exists
-    const newSlug = await storage.addLink(url, slug)
+    const newSlug = await store.addLink(url, slug)
 
     // response
     res.send({ slug: newSlug, link: origin + newSlug })

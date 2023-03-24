@@ -1,5 +1,5 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
-import storage from '../storage/index.js'
+import store from './store.js'
 
 export default async (req: VercelRequest, res: VercelResponse): Promise<any> => {
   const { slug } = req.query
@@ -10,13 +10,13 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<any> => 
 
   try {
     // get target url by slug
-    const url = await storage.getUrlBySlug(slug)
+    const url = await store.getUrlBySlug(slug)
 
     // target url not found
     if (url == null) return res.status(404).send('Not Found')
 
     // add access log
-    await storage.addLog(slug, req.headers['user-agent'], req.headers['x-real-ip']?.toString())
+    await store.addLog(slug, req.headers['user-agent'], req.headers['x-real-ip']?.toString())
 
     // 307 redirect if target exists
     res.redirect(url)
