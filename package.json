@@ -16,7 +16,7 @@
     "lint": "ts-standard --fix"
   },
   "dependencies": {
-    "@cloudbase/node-sdk": "2.7.1",
+    "@cloudbase/node-sdk": "2.9.1",
     "got": "12.6.0",
     "nanoid": "4.0.1",
     "redis": "4.6.5"
