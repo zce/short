@@ -1,9 +1,7 @@
 import { Redis } from '@upstash/redis'
 import { customAlphabet } from 'nanoid'
 
-const { REDIS_URL = '', REDIS_TOKEN = '' } = process.env
-
-const redis = new Redis({ url: REDIS_URL, token: REDIS_TOKEN })
+const redis = Redis.fromEnv()
 const nanoid = customAlphabet('1234567890abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', 4)
 
 const getUrlBySlug = async (slug: string): Promise<string | undefined> => {
