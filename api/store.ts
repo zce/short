@@ -14,7 +14,7 @@ const getSlugByUrl = async (url: string): Promise<string | undefined> => {
   if (res != null) return res
 }
 
-const createSlug = async (): Promise<string> =>{
+const createSlug = async (): Promise<string> => {
   const slug = nanoid()
   const exists = await getUrlBySlug(slug)
   if (exists == null) return slug
@@ -31,7 +31,7 @@ const addLink = async (url: string, slug?: string): Promise<string> => {
   return slug
 }
 
-const addLog = async (slug: string, ua?: string, ip?: string): Promise<void> =>{
+const addLog = async (slug: string, ua?: string, ip?: string): Promise<void> => {
   console.log({ slug, ua, ip, date: new Date() })
 }
 
