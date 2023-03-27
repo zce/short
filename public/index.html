@@ -209,11 +209,11 @@
       <details>
         <summary>Advanced settings</summary>
         <div>
-          <input placeholder="Custom slug" x-model="slug" />
+          <input placeholder="Custom slug /[a-zA-Z0-9_-]{3,10}/" x-model="slug" />
           <small>Slug is a randomly generated short id by default.</small>
         </div>
       </details>
-      <button :class="{ loading }" :disabled="loading || isValidated()" @click="submit($refs, $nextTick)">Generate</button>
+      <button :class="{ loading }" :disabled="loading || !isValidatedUrl() || !isValidatedSlug()" @click="submit($refs, $nextTick)">Generate</button>
     </main>
     <footer>
       This <a href="https://t.zce.me">service</a> is hosted on <a href="https://vercel.com">Vercel</a><br />
@@ -226,8 +226,11 @@
         slug: '',
         alert: null,
         loading: false,
-        isValidated () {
-          return !/^https?:\/\/.{3,}/.test(this.url)
+        isValidatedUrl () {
+          return /^https?:\/\/.{3,}/.test(this.url)
+        },
+        isValidatedSlug () {
+          return this.slug === '' || /^[a-zA-Z0-9_-]{3,10}$/.test(this.slug)
         },
         submit ($refs, $nextTick) {
           if (!this.url) {
@@ -235,8 +238,13 @@
             return
           }
 
-          if (this.isValidated()) {
+          if (!this.isValidatedUrl()) {
             this.alert = { type: 'error', message: 'Illegal format: url.' }
+            return
+          }
+
+          if (!this.isValidatedSlug()) {
+            this.alert = { type: 'error', message: 'Illegal format: slug.' }
             return
           }
 
