@@ -4,9 +4,8 @@ import store from './store.js'
 export default async (req: VercelRequest, res: VercelResponse): Promise<any> => {
   const { slug } = req.query
 
-  if (typeof slug !== 'string' || slug === '') {
+  if (typeof slug !== 'string' || slug === '')
     return res.status(400).send('Bad Request')
-  }
 
   try {
     // get target url by slug

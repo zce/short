@@ -1,56 +1,62 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node'
 import store from './store.js'
 
+interface Params {
+  url?: string
+  slug?: string
+}
+
+/**
+ * { url: 'https://example.com', slug: 'example' }
+ * { url: 'https://example.com', slug: '' }
+ * { url: 'https://example.com' }
+ * { url: '' }
+ * {}
+ */
 export default async (req: VercelRequest, res: VercelResponse): Promise<any> => {
   // params from request body or querystring
-  const params = req.body ?? req.query
-  const { url = '', slug = '' } = params as { url?: string, slug?: string }
+  const { url, slug } = Object.assign({}, req.body, req.query) as Params
 
   // url is required
-  if (url === '') {
+  if (url == null || url === '')
     return res.status(400).send({ message: 'Missing required parameter: url.' })
-  }
 
   // url format check
-  if (!/^https?:\/\/.{3,}/.test(url)) {
+  if (!/^https?:\/\/.{3,}/.test(url))
     return res.status(400).send({ message: 'Illegal format: url.' })
-  }
 
-  // custom slug length check
-  if (slug.length !== 0 && (slug.length < 2 || slug.length > 10)) {
+  // custom slug length check if slug customized
+  if (slug != null && (slug.length < 2 || slug.length > 10))
     return res.status(400).send({ message: 'Illegal length: slug, (>= 2 && <= 10).' })
-  }
 
+  console.log(req.headers)
+
+  // request origin url
   const getForwarded = (name: string): string => req.headers[`x-forwarded-${name}`]?.toString() ?? ''
+  const origin = `${getForwarded('proto')}://${getForwarded('host')}/`
 
   try {
-    // request origin url
-    const origin = `${getForwarded('proto')}://${getForwarded('host')}/`
-
     // if slug customized
-    if (slug !== '') {
+    if (slug != null) {
       const existUrl = await store.getUrlBySlug(slug)
 
-      // url & slug are the same.
-      if (existUrl === url) {
+      // both slug & url match
+      if (existUrl === url)
         return res.send({ slug, link: origin + slug })
-      }
 
       // slug already exists
-      if (existUrl != null) {
+      if (existUrl != null)
         return res.status(400).send({ message: 'Slug already exists.' })
-      }
     }
 
-    // target url exists
+    // check target url exists
     const existSlug = await store.getSlugByUrl(url)
 
     // url exists & no custom slug
-    if (existSlug != null && slug === '') {
+    if (existSlug != null && slug == null)
       return res.send({ slug: existSlug, link: origin + existSlug })
-    }
 
-    // create if not exists
+    // create if not exists or custom slug
     const newSlug = await store.addLink(url, slug)
 
     // response

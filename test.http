@@ -1,0 +1,42 @@
+@root = http://localhost:3000
+
+### No parameters
+GET {{root}}/create HTTP/1.1
+
+# {
+#   "message": "Missing required parameter: url."
+# }
+
+### GET request with url parameter
+GET {{root}}/create?url=https://www.google.com HTTP/1.1
+
+# {
+#   "slug": "VOqN",
+#   "link": "http://localhost:3000/VOqN"
+# }
+
+### GET request with url & slug parameters
+GET {{root}}/create?url=https://www.google.com&slug=google HTTP/1.1
+
+# {
+#   "slug": "google",
+#   "link": "http://localhost:3000/google"
+# }
+
+### GET request with url & exist slug parameters
+GET {{root}}/create?url=https://www.google1.com&slug=google HTTP/1.1
+
+# {
+#   "message": "Slug already exists."
+# }
+
+### POST request with url parameter
+POST {{root}}/create HTTP/1.1
+content-type: application/json
+
+{
+  "url": "https://www.google.com"
+}
+
+### Redirect to url
+GET {{root}}/VOqN HTTP/1.1
