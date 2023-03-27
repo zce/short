@@ -1,26 +1,33 @@
-import type { VercelRequest, VercelResponse } from '@vercel/node'
-import store from './store.js'
+import store from './store'
 
-export default async (req: VercelRequest, res: VercelResponse): Promise<any> => {
-  const { slug } = req.query
+export const config = {
+  runtime: 'edge'
+}
 
-  if (typeof slug !== 'string' || slug === '')
-    return res.status(400).send('Bad Request')
+export default async (req: Request) => {
+  const { searchParams } = new URL(req.url)
+
+  const slug = searchParams.get('slug')
+
+  if (slug == null || slug === '') {
+    return new Response('Bad Request', { status: 400 })
+  }
 
   try {
     // get target url by slug
     const url = await store.getUrlBySlug(slug)
 
     // target url not found
-    if (url == null) return res.status(404).send('Not Found')
+    if (url == null) {
+      return new Response('Not Found', { status: 404 })
+    }
 
     // add access log
-    await store.addLog(slug, req.headers['user-agent'], req.headers['x-real-ip']?.toString())
+    await store.addLog(slug, req.headers.get('user-agent'), req.headers.get('x-real-ip'))
 
     // 307 redirect if target exists
-    res.redirect(url)
+    return Response.redirect(url, 307)
   } catch (e) {
-    const err = e as Error
-    return res.status(500).send(err.message)
+    return new Response(e.message, { status: 500 })
   }
 }
