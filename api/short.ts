@@ -1,8 +1,6 @@
 import store from './store'
 
-export const config = {
-  runtime: 'edge'
-}
+export const config = { runtime: 'edge' }
 
 export default async (req: Request) => {
   const { searchParams } = new URL(req.url)

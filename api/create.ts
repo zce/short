@@ -1,23 +1,8 @@
-import store from './store.js'
+import store from './store'
 
-interface Params {
-  url?: string
-  slug?: string
-}
+export const config = { runtime: 'edge' }
 
-type Data = {
-  slug: string
-  link: string
-} | {
-  error: string
-  message: string
-}
-
-export const config = {
-  runtime: 'edge'
-}
-
-const response = (data: Data, status: number = 200) => {
+const response = (data: { slug: string; link: string } | { error: string; message: string }, status: number = 200) => {
   return new Response(JSON.stringify(data), { status, headers: { 'Content-Type': 'application/json' } })
 }
 
@@ -27,11 +12,11 @@ export default async (req: Request) => {
     return response({ error: 'Method Not Allowed', message: 'Only POST method allowed.' }, 405)
   }
 
-  let params: Params = {}
+  let params = {} as { url?: string; slug?: string }
 
   try {
-    params = await req.json() as Params
-  } catch (e) {
+    params = await req.json()
+  } catch {
     return response({ error: 'Bad Request', message: 'Illegal body: unexpected end of JSON input.' }, 400)
   }
 

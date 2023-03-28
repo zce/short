@@ -6,9 +6,9 @@
     <title>short</title>
     <style>
       :root {
-        --color-primary: #5c7cfa;
-        --color-primary-dark: #4263eb;
-        --color-primary-alpha: #5c7cfa50;
+        --color-primary: #15aabf;
+        --color-primary-dark: #0c8599;
+        --color-primary-alpha: #15aabf50;
 
         --body-color: #495057;
         --body-bg: #f8f9fa;
@@ -18,10 +18,8 @@
 
       body {
         max-width: 30rem;
-        margin-left: auto;
-        margin-right: auto;
-        padding-left: 2rem;
-        padding-right: 2rem;
+        margin: 0 auto;
+        padding: 0 2rem;
         color: var(--body-color);
         background: var(--body-bg);
         font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
@@ -44,18 +42,17 @@
 
       h1 {
         font-size: 5rem;
-        font-weight: 300;
+        font-weight: lighter;
         text-align: center;
         opacity: .2;
       }
 
-      main[x-cloak] {
-        opacity: 0;
+      main {
+        transition: opacity .3s;
       }
 
-      main:not([x-cloak]) {
-        opacity: 1;
-        transition: opacity .3s;
+      main[x-cloak] {
+        opacity: 0;
       }
 
       input {
@@ -108,6 +105,7 @@
         margin: 0;
         font-size: .875rem;
         line-height: 2;
+        opacity: .7;
       }
 
       button {
@@ -165,6 +163,7 @@
         padding: 1rem;
         border-top: 1px solid var(--border-color);
         text-align: center;
+        font-size: .875rem;
         opacity: .5;
       }
 
@@ -209,7 +208,7 @@
       <details>
         <summary>Advanced settings</summary>
         <div>
-          <input placeholder="Custom slug /[a-zA-Z0-9_-]{3,10}/" x-model="slug" />
+          <input placeholder="Custom slug /^[\w-]{3,10}$/" x-model="slug" />
           <small>Slug is a randomly generated short id by default.</small>
         </div>
       </details>
@@ -219,7 +218,7 @@
       This <a href="https://t.zce.me">service</a> is hosted on <a href="https://vercel.com">Vercel</a><br />
       <a href="https://github.com/zce/short">&lt;/&gt;</a> with <i>&hearts;</i> by <a href="https://zce.me">zce</a>
     </footer>
-    <script src="alpine.js"></script>
+    <script src="//unpkg.com/alpinejs" defer></script>
     <script>
       const app = {
         url: '',
@@ -230,7 +229,7 @@
           return /^https?:\/\/.{3,}/.test(this.url)
         },
         isValidatedSlug () {
-          return this.slug === '' || /^[a-zA-Z0-9_-]{3,10}$/.test(this.slug)
+          return this.slug === '' || /^[\w-]{3,10}$/.test(this.slug)
         },
         submit ($refs, $nextTick) {
           if (!this.url) {
