@@ -19,7 +19,7 @@
     ]
   },
   "dependencies": {
-    "@upstash/redis": "1.20.1",
+    "@upstash/redis": "1.20.2",
     "nanoid": "4.0.2"
   },
   "devDependencies": {
