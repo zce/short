@@ -215,7 +215,7 @@
       <button :class="{ loading }" :disabled="loading || !isValidatedUrl() || !isValidatedSlug()" @click="submit($refs, $nextTick)">Generate</button>
     </main>
     <footer>
-      This <a href="https://t.zce.me">service</a> is hosted on <a href="https://vercel.com">Vercel</a><br />
+      This <a href="/">service</a> is hosted on <a href="https://vercel.com">Vercel</a><br />
       <a href="https://github.com/zce/short">&lt;/&gt;</a> with <i>&hearts;</i> by <a href="https://zce.me">zce</a>
     </footer>
     <script src="//unpkg.com/alpinejs" defer></script>
@@ -232,6 +232,8 @@
           return this.slug === '' || /^[\w-]{3,10}$/.test(this.slug)
         },
         submit ($refs, $nextTick) {
+          this.alert = null
+
           if (!this.url) {
             this.alert = { type: 'error', message: 'Missing required parameter: url.' }
             return
@@ -247,7 +249,6 @@
             return
           }
 
-          this.alert = null
           this.loading = true
 
           const body = { url: this.url }
@@ -274,8 +275,8 @@
               })
             })
             .catch(e => {
-              this.alert = { type: 'error', message: e.message }
               this.loading = false
+              this.alert = { type: 'error', message: e.message }
             })
         }
       }
