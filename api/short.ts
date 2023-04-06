@@ -1,4 +1,4 @@
-import store from './store'
+import store from './_store'
 
 export const config = { runtime: 'edge' }
 
