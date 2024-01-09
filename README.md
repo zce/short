@@ -51,6 +51,90 @@ $ curl https://t.zce.me/create -d "url=https://zce.me" -d "slug=zce"
 }
 ```
 
+## REST API Test
+
+### Bad request
+
+```http
+POST http://localhost:3000/create HTTP/1.1
+
+# {
+#   "error": "Bad Request",
+#   "message": "Illegal body: unexpected end of JSON input."
+# }
+```
+
+### No parameters
+
+```http
+POST http://localhost:3000/create HTTP/1.1
+content-type: application/json
+
+{}
+
+# {
+#   "error": "Bad Request",
+#   "message": "Missing required parameter: url."
+# }
+```
+
+### Request with url parameter
+
+```http
+POST http://localhost:3000/create HTTP/1.1
+content-type: application/json
+
+{
+  "url": "https://www.google.com"
+}
+
+# {
+#   "slug": "bPVp",
+#   "link": "http://localhost:3000/bPVp"
+# }
+```
+
+### Request with url & slug parameters
+
+```http
+POST http://localhost:3000/create HTTP/1.1
+content-type: application/json
+
+{
+  "url": "https://www.google.com",
+  "slug": "google"
+}
+
+# {
+#   "slug": "google",
+#   "link": "http://localhost:3000/google"
+# }
+```
+
+### Request with url & exist slug parameters
+
+```http
+POST http://localhost:3000/create HTTP/1.1
+content-type: application/json
+
+{
+  "url": "https://www.google1.com",
+  "slug": "google"
+}
+```
+
+# {
+#   "error": "Bad Request",
+#   "message": "Slug already exists."
+# }
+```
+
+### Redirect to url
+
+```http
+GET http://localhost:3000/google HTTP/1.1
+```
+
 ## License
 
 [MIT](LICENSE) &copy; [zce](https://zce.me)
