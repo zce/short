@@ -20,7 +20,7 @@
   },
   "dependencies": {
     "@upstash/redis": "1.20.2",
-    "nanoid": "4.0.2"
+    "nanoid": "5.0.3"
   },
   "devDependencies": {
     "@vercel/node": "2.10.2"
