@@ -1,4 +1,4 @@
-import store from './_store'
+import * as store from '../core/store'
 
 export const config = { runtime: 'edge' }
 
@@ -13,7 +13,7 @@ export default async (req: Request) => {
 
   try {
     // get target url by slug
-    const url = await store.getUrlBySlug(slug)
+    const url = await store.getUrl(slug)
 
     // target url not found
     if (url == null) {
@@ -21,11 +21,15 @@ export default async (req: Request) => {
     }
 
     // add access log
-    await store.addLog(slug, req.headers.get('user-agent'), req.headers.get('x-real-ip'))
+    await store.logAccess(slug, req.headers.get('user-agent'), req.headers.get('x-real-ip'))
 
     // 307 redirect if target exists
     return Response.redirect(url, 307)
   } catch (e) {
-    return new Response(e.message, { status: 500 })
+    if (e instanceof Error) {
+      return new Response(e.message, { status: 500 })
+    }
+    console.error('Unknown error', e)
+    return new Response('Internal Server Error', { status: 500 })
   }
 }

@@ -1,4 +1,4 @@
-import store from './_store'
+import * as store from '../core/store'
 
 export const config = { runtime: 'edge' }
 
@@ -49,34 +49,42 @@ export default async (req: Request) => {
   try {
     // if slug customized
     if (slug != null) {
-      const existUrl = await store.getUrlBySlug(slug)
+      const existingUrl = await store.getUrl(slug)
 
       // both slug & url match
-      if (existUrl === url) {
+      if (existingUrl === url) {
         return json({ slug, link: origin + '/' + slug })
       }
 
       // slug already exists
-      if (existUrl != null) {
+      if (existingUrl != null) {
         return json({ error: 'Bad Request', message: 'Slug already exists.' }, 400)
       }
     }
+    else {
+      // check target url exists
+      const existingSlug = await store.getSlug(url)
 
-    // check target url exists
-    const existSlug = await store.getSlugByUrl(url)
-
-    // url exists & no custom slug
-    if (existSlug != null && slug == null) {
-      return json({ slug: existSlug, link: origin + '/' + existSlug })
+      // url exists & no custom slug
+      if (existingSlug != null) {
+        return json({ slug: existingSlug, link: origin + '/' + existingSlug })
+      }
     }
 
     // create if not exists or custom slug
-    const newSlug = await store.addLink(url, slug)
+    const newSlug = await store.createMapping(url, slug)
 
     // response
     return json({ slug: newSlug, link: origin + '/' + newSlug })
   } catch (e) {
-    console.error(e.name)
-    return json({ error: 'Server Error', message: e.message }, 500)
+    if (e instanceof store.MappingConflictError) {
+      return json({ error: 'Bad Request', message: 'Slug already exists.' }, 400)
+    }
+    if (e instanceof Error) {
+      console.error(e.message)
+      return json({ error: 'Server Error', message: e.message }, 500)
+    }
+    console.error('Unknown error', e)
+    return json({ error: 'Server Error', message: 'Unknown error.' }, 500)
   }
 }

@@ -14,8 +14,6 @@
     "develop": "npx vercel dev"
   },
   "dependencies": {
-    "@upstash/redis": "1.28.0",
-    "nanoid": "5.0.9"
-  },
-  "packageManager": "pnpm@8.14.0"
+    "@upstash/redis": "1.35.3"
+  }
 }
